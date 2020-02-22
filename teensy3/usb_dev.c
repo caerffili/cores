@@ -479,6 +479,50 @@ static void usb_setup(void)
 		}
 		break;
 #endif
+
+#if defined(FFBJOYSTICK_INTERFACE)
+	case 0x01A1:
+		if (setup.wValue == 0x0307 && setup.wIndex == FFBJOYSTICK_INTERFACE)
+		{
+			reply_buffer[0] = 7;
+			reply_buffer[1] = 0xff;
+			reply_buffer[2] = 0xff;
+			reply_buffer[3] = FFBJOYSTICK_MAX_EFFECTS;
+			reply_buffer[4] = 3;
+			data = reply_buffer;
+			datalen = 5;
+		}
+		else if (setup.wValue == 0x0306 && setup.wIndex == FFBJOYSTICK_INTERFACE)
+		{
+			// Go and get the status of the request
+			reply_buffer[0] = 6;
+			reply_buffer[1] = 6;
+			reply_buffer[2] = 6;
+			reply_buffer[3] = 6;
+			reply_buffer[4] = 6;
+			data = reply_buffer;
+			datalen = 5;
+		}
+		else
+		{
+			endpoint0_stall();
+			return;
+		}
+		break;
+	case 0x0921: // HID SET_REPORT
+		if (setup.wValue == 0x0305 && setup.wIndex == FFBJOYSTICK_INTERFACE)
+		{
+			// Go off and create a new effect
+			datalen = 0;
+		}
+		else
+		{
+			endpoint0_stall();
+			return;
+		}
+		break;
+#endif
+
 	  default:
 		endpoint0_stall();
 		return;
