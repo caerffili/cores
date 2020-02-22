@@ -68,6 +68,12 @@ usb_joystick_class Joystick;
 uint8_t usb_joystick_class::manual_mode = 0;
 #endif
 
+#ifdef FFBJOYSTICK_INTERFACE
+usb_ffbjoystick_class FFBJoystick;
+uint8_t usb_ffbjoystick_class::manual_mode = 0;
+//usb_serial_class Serial;
+#endif
+
 #ifdef USB_DISABLED
 usb_serial_class Serial;
 #endif
@@ -75,7 +81,7 @@ usb_serial_class Serial;
 
 #else // F_CPU < 20 MHz
 
-#if defined(USB_SERIAL) || defined(USB_SERIAL_HID)
+#if defined(USB_SERIAL) || defined(USB_SERIAL_HID) || defined(USB_FFBJOY)
 usb_serial_class Serial;
 #elif (USB_DISABLED)
 usb_serial_class Serial;
