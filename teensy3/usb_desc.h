@@ -905,7 +905,7 @@ let me know?  http://forum.pjrc.com/forums/4-Suggestions-amp-Bug-Reports
   #define FFBJOYSTICK_SIZE_IN        13	//  12 = normal, 64 = extreme joystick 
   #define FFBJOYSTICK_SIZE_OUT        64	//  12 = normal, 64 = extreme joystick 
   #define FFBJOYSTICK_ENDPOINT_OUT    5
-
+  #define FFBJOYSTICK_MAX_EFFECTS   14 
   #define FFBJOYSTICK_INTERVAL     1 
 //  #define ENDPOINT1_CONFIG	ENDPOINT_TRANSMIT_ONLY
   #define ENDPOINT1_CONFIG	ENDPOINT_TRANSMIT_ONLY
