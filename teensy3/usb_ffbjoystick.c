@@ -130,7 +130,7 @@ int usb_joystick_send(void)
         }
 	transmit_previous_timeout = 0;
 	
-    usb_joystick_data[0] = 1; // Report ID
+    usb_joystick_data[0] = usb_joystick_data[0] | 1; // Report ID
 			
 	memcpy(tx_packet->buf, usb_joystick_data, FFBJOYSTICK_SIZE_IN);
         tx_packet->len = FFBJOYSTICK_SIZE_IN;

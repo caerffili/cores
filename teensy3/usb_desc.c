@@ -351,7 +351,7 @@ static uint8_t joystick_report_desc[] = {
 #endif // JOYSTICK_INTERFACE
 
 #ifdef FFBJOYSTICK_INTERFACE
-#if FFBJOYSTICK_SIZE_IN == 13
+#if FFBJOYSTICK_SIZE_IN == 12
 static uint8_t ffbjoystick_report_desc[] = {
     0x05, 0x01, // Usage Page (Generic Desktop) - Global Item
     0x09, 0x04, // Usage (Joystick) - Local Item
@@ -361,10 +361,10 @@ static uint8_t ffbjoystick_report_desc[] = {
     0x15, 0x00,       //   Logical Minimum (0)
     0x25, 0x01,       //   Logical Maximum (1)
     0x75, 0x01,       //   Report Size (1)
-    0x95, 0x20,       //   Report Count (32)
+    0x95, 0x18,       //   Report Count (24)
     0x05, 0x09,       //   Usage Page (Button)
     0x19, 0x01,       //   Usage Minimum (Button #1)
-    0x29, 0x20,       //   Usage Maximum (Button #32)
+    0x29, 0x18,       //   Usage Maximum (Button #32)
     0x81, 0x02,       //   Input (variable,absolute)
     0x15, 0x00,       //   Logical Minimum (0)
     0x25, 0x07,       //   Logical Maximum (7)

@@ -59,55 +59,54 @@ class usb_ffbjoystick_class
 		int available(void) {return usb_ffbreport_available(); }
 		int recv(void *buffer, uint16_t timeout) { return usb_ffbreport_recv(buffer, timeout); }
 		
-#if FFBJOYSTICK_SIZE_IN == 13
+#if FFBJOYSTICK_SIZE_IN == 12
 	void button(uint8_t button, bool val) {
-		if (--button >= 32) return;
-
-		if (val) usb_joystick_data[1] |= (1 << button);
-		else usb_joystick_data[1] &= ~(1 << button);
+		if (--button >= 24) return;
+		if (val) usb_joystick_data[0] |= (1 << button + 8);
+		else usb_joystick_data[0] &= ~(1 << button + 8);
 		if (!manual_mode) usb_joystick_send();
 	}
 	void X(unsigned int val) {
 		if (val > 1023) val = 1023;
-		usb_joystick_data[2] = (usb_joystick_data[2] & 0xFFFFC00F) | (val << 4);
+		usb_joystick_data[1] = (usb_joystick_data[1] & 0xFFFFC00F) | (val << 4);
 		if (!manual_mode) usb_joystick_send();
 	}
 	void Y(unsigned int val) {
 		if (val > 1023) val = 1023;
-		usb_joystick_data[2] = (usb_joystick_data[2] & 0xFF003FFF) | (val << 14);
+		usb_joystick_data[1] = (usb_joystick_data[1] & 0xFF003FFF) | (val << 14);
 		if (!manual_mode) usb_joystick_send();
 	}
 	void position(unsigned int x, unsigned int y) {
 		if (x > 1023) x = 1023;
 		if (y > 1023) y = 1023;
-		usb_joystick_data[2] = (usb_joystick_data[2] & 0xFFF00000)
+		usb_joystick_data[1] = (usb_joystick_data[1] & 0xFFF00000)
 			| (x << 4) | (y << 14);
 		if (!manual_mode) usb_joystick_send();
 	}
 	void Z(unsigned int val) {
 		if (val > 1023) val = 1023;
-		usb_joystick_data[2] = (usb_joystick_data[2] & 0x00FFFFFF) | (val << 24);
-		usb_joystick_data[3] = (usb_joystick_data[3] & 0xFFFFFFFC) | (val >> 8);
+		usb_joystick_data[1] = (usb_joystick_data[1] & 0x00FFFFFF) | (val << 24);
+		usb_joystick_data[2] = (usb_joystick_data[2] & 0xFFFFFFFC) | (val >> 8);
 		if (!manual_mode) usb_joystick_send();
 	}
 	void Zrotate(unsigned int val) {
 		if (val > 1023) val = 1023;
-		usb_joystick_data[3] = (usb_joystick_data[3] & 0xFFFFF003) | (val << 2);
+		usb_joystick_data[2] = (usb_joystick_data[2] & 0xFFFFF003) | (val << 2);
 		if (!manual_mode) usb_joystick_send();
 	}
 	void sliderLeft(unsigned int val) {
 		if (val > 1023) val = 1023;
-		usb_joystick_data[3] = (usb_joystick_data[3] & 0xFFC00FFF) | (val << 12);
+		usb_joystick_data[2] = (usb_joystick_data[2] & 0xFFC00FFF) | (val << 12);
 		if (!manual_mode) usb_joystick_send();
 	}
 	void sliderRight(unsigned int val) {
 		if (val > 1023) val = 1023;
-		usb_joystick_data[3] = (usb_joystick_data[3] & 0x003FFFFF) | (val << 22);
+		usb_joystick_data[2] = (usb_joystick_data[2] & 0x003FFFFF) | (val << 22);
 		if (!manual_mode) usb_joystick_send();
 	}
 	void slider(unsigned int val) {
 		if (val > 1023) val = 1023;
-		usb_joystick_data[3] = (usb_joystick_data[3] & 0x00000FFF)
+		usb_joystick_data[2] = (usb_joystick_data[2] & 0x00000FFF)
 			| (val << 12) | (val << 22);
 		if (!manual_mode) usb_joystick_send();
 	}
@@ -122,7 +121,7 @@ class usb_ffbjoystick_class
                 else if (dir < 245) val = 5;
                 else if (dir < 293) val = 6;
                 else if (dir < 338) val = 7;
-		usb_joystick_data[2] = (usb_joystick_data[2] & 0xFFFFFFF0) | val;
+		usb_joystick_data[1] = (usb_joystick_data[1] & 0xFFFFFFF0) | val;
                 if (!manual_mode) usb_joystick_send();
         }
 #elif FFBJOYSTICK_SIZE_IN == 64
