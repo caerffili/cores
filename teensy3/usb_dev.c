@@ -387,7 +387,7 @@ static void usb_setup(void)
 #endif
 
 // TODO: this does not work... why?
-#if defined(SEREMU_INTERFACE) || defined(KEYBOARD_INTERFACE)
+#if defined(SEREMU_INTERFACE) || defined(KEYBOARD_INTERFACE) || defined(FFBJOYSTICK_INTERFACE)
 	  case 0x0921: // HID SET_REPORT
 		//serial_print(":)\n");
 		return;
@@ -495,25 +495,9 @@ static void usb_setup(void)
 		else if (setup.wValue == 0x0306 && setup.wIndex == FFBJOYSTICK_INTERFACE)
 		{
 			// Go and get the status of the request
-			reply_buffer[0] = 6;
-			reply_buffer[1] = 6;
-			reply_buffer[2] = 6;
-			reply_buffer[3] = 6;
-			reply_buffer[4] = 6;
+			memcpy(reply_buffer, usb_ffbjoystick_callback2(), 5);
 			data = reply_buffer;
 			datalen = 5;
-		}
-		else
-		{
-			endpoint0_stall();
-			return;
-		}
-		break;
-	case 0x0921: // HID SET_REPORT
-		if (setup.wValue == 0x0305 && setup.wIndex == FFBJOYSTICK_INTERFACE)
-		{
-			// Go off and create a new effect
-			datalen = 0;
 		}
 		else
 		{
@@ -597,18 +581,6 @@ static void usb_control(uint32_t stat)
 		setup.word1 = *(uint32_t *)(buf);
 		setup.word2 = *(uint32_t *)(buf + 4);
 		
-#if defined(FFBJOYSTICK_INTERFACE)
-	switch (setup.wRequestAndType) {
-	case 0x0921: // HID SET_REPORT
-		if (setup.wValue == 0x0305 && setup.wIndex == FFBJOYSTICK_INTERFACE)
-		{
-			usb_packet_t *packet = (usb_packet_t *)((uint8_t *)(b->addr) - 8);
-			usb_ffbjoystick_callback(packet, b);
-		}
-		break;
-		default: break;
-	}
-#endif
 		// give the buffer back
 		b->desc = BDT_DESC(EP0_SIZE, DATA1);
 		//table[index(0, RX, EVEN)].desc = BDT_DESC(EP0_SIZE, 1);
@@ -680,6 +652,13 @@ static void usb_control(uint32_t stat)
 #endif
 #ifdef AUDIO_INTERFACE
 		if (usb_audio_set_feature(&setup, buf)) {
+			endpoint0_transmit(NULL, 0);
+		}
+#endif
+#if defined(FFBJOYSTICK_INTERFACE)
+		if (setup.word1 == 0x03050921 && setup.word2 == ((4<<16)|FFBJOYSTICK_INTERFACE))
+		{
+			usb_ffbjoystick_callback(buf);
 			endpoint0_transmit(NULL, 0);
 		}
 #endif

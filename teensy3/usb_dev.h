@@ -115,7 +115,8 @@ extern void usb_touchscreen_update_callback(void);
 #endif
 
 #if defined(FFBJOYSTICK_INTERFACE)
-extern void usb_ffbjoystick_callback(uint8_t *buf, uint8_t *b);
+extern void usb_ffbjoystick_callback(uint8_t *b);
+extern uint8_t *usb_ffbjoystick_callback2();
 #endif
 
 #ifdef __cplusplus
