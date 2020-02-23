@@ -114,7 +114,9 @@ extern int usb_audio_set_feature(void *stp, uint8_t *buf);
 extern void usb_touchscreen_update_callback(void);
 #endif
 
-extern int usb_ffbjoystick_callback(uint8_t *buf);
+#if defined(FFBJOYSTICK_INTERFACE)
+extern void usb_ffbjoystick_callback(uint8_t *buf, uint8_t *b);
+#endif
 
 #ifdef __cplusplus
 }

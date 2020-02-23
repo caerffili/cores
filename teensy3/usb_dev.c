@@ -596,7 +596,19 @@ static void usb_control(uint32_t stat)
 		// grab the 8 byte setup info
 		setup.word1 = *(uint32_t *)(buf);
 		setup.word2 = *(uint32_t *)(buf + 4);
-
+		
+#if defined(FFBJOYSTICK_INTERFACE)
+	switch (setup.wRequestAndType) {
+	case 0x0921: // HID SET_REPORT
+		if (setup.wValue == 0x0305 && setup.wIndex == FFBJOYSTICK_INTERFACE)
+		{
+			usb_packet_t *packet = (usb_packet_t *)((uint8_t *)(b->addr) - 8);
+			usb_ffbjoystick_callback(packet, b);
+		}
+		break;
+		default: break;
+	}
+#endif
 		// give the buffer back
 		b->desc = BDT_DESC(EP0_SIZE, DATA1);
 		//table[index(0, RX, EVEN)].desc = BDT_DESC(EP0_SIZE, 1);
