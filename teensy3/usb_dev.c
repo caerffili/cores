@@ -658,7 +658,7 @@ static void usb_control(uint32_t stat)
 #if defined(FFBJOYSTICK_INTERFACE)
 		if (setup.word1 == 0x03050921 && setup.word2 == ((4<<16)|FFBJOYSTICK_INTERFACE))
 		{
-			usb_ffbjoystick_callback(buf);
+			usb_ffbjoystick_callback(buf, setup.wLength);
 			endpoint0_transmit(NULL, 0);
 		}
 #endif

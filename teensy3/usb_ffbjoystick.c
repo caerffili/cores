@@ -102,7 +102,7 @@ int usb_ffbreport_recv(void *buffer, uint32_t timeout)
 	}
 	memcpy(buffer, rx_packet->buf, FFBJOYSTICK_SIZE_OUT);
 	usb_free(rx_packet);
-	return 64;
+	return rx_packet->len;
 }
 
 int usb_joystick_send(void)
