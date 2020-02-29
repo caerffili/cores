@@ -495,7 +495,7 @@ static void usb_setup(void)
 		else if (setup.wValue == 0x0306 && setup.wIndex == FFBJOYSTICK_INTERFACE)
 		{
 			// Go and get the status of the request
-			memcpy(reply_buffer, usb_ffbjoystick_callback2(), 5);
+			memcpy(reply_buffer, usb_ffbjoystick_getNewEffectStatus(), 5);
 			data = reply_buffer;
 			datalen = 5;
 		}
@@ -658,7 +658,7 @@ static void usb_control(uint32_t stat)
 #if defined(FFBJOYSTICK_INTERFACE)
 		if (setup.word1 == 0x03050921 && setup.word2 == ((4<<16)|FFBJOYSTICK_INTERFACE))
 		{
-			usb_ffbjoystick_callback(buf, setup.wLength);
+			usb_ffbjoystick_createNewEffect(buf, setup.wLength);
 			endpoint0_transmit(NULL, 0);
 		}
 #endif
